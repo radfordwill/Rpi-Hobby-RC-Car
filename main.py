@@ -1,6 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+"""
+Created on Sun Apr 09 09:44:23 2023
+@author: Will Radford
+This file serves as the main file for the Rpi Zero RC Car app
+"""
 #Libraries
 import curses
 import os     #importing os library so as to communicate with the system
@@ -21,8 +26,8 @@ from processor.simple_streamer import SimpleStreamer as VideoCamera
 # from processor.face_detector import FaceDetector as VideoCamera
 # from processor.person_detector import PersonDetector as VideoCamera
 import threading
+import Config as cfg
 
-# LED strip configuration:
 LED_COUNT = 8   # Number of LED pixels.
 LED_PIN = 18   # GPIO pin connected to the pixels (18 uses PWM!).
 # LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
@@ -32,34 +37,18 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
+
 #Gamepad setup and controller check
 gamepadType = Gamepad.PS4
-buttonArm = 'OPTIONS'
-
-buttonBeep = 'CIRCLE'
-buttonExit = 'PS'
-joystickSpeed = 'LEFT-Y'
-joystickSteering = 'RIGHT-X'
-pollInterval = 0.1
-
 if not Gamepad.available():
     print('Please connect your controller...')
     while not Gamepad.available():
         time.sleep(1.0)
 gamepad = gamepadType()
+
 print('Gamepad connected')
 
 #Setup for RC motor and steering
-
-#gpio 
-#GPIO.setmode(GPIO.BOARD)
-# pi1 accesses the local Pi's gpios
-ESC=8 #Connect the ESC on this GPIO pin 
-SERVO=3 # pin number on pca9685 for steering servo
-
-forward_speed_value = -.02  #change this if your ESC's value is different or leave it be
-backward_speed_value = .22  #change this if your ESC's value is different or leave it be
-
 #pca9685 setup
 i2c_bus = busio.I2C(SCL,SDA)
 pca = PCA9685(i2c_bus)
@@ -70,15 +59,14 @@ i2c_mpu = board.I2C()  # uses board.SCL and board.SDA
 mpu = adafruit_mpu6050.MPU6050(i2c_mpu)
 
 # max servo channels.
-kit = ServoKit(channels=16)
-#Set steering to center-ish
-kit.servo[3].angle = 93
+kit =ServoKit(channels=16)
+kit.servo[3].angle = 93 #Set steering to center-ish
 time.sleep(1)
+
 print ("Done with RC Controls & Sensors")
 
+#picamera and flask web page
 video_camera = VideoCamera(flip=False)
-
-
 app = Flask(__name__)
 
 @app.route('/')
@@ -95,7 +83,6 @@ def gen(camera):
 def video_feed():
     return Response(gen(video_camera),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
-
 
 print ("Done with video feed")
 
@@ -129,28 +116,28 @@ def theaterChase(strip, color, wait_ms=50, iterations=10):
                 strip.setPixelColor(i + q, 0)
 
 def right_side():
-    kit.servo[SERVO].angle = 180    
+    kit.servo[cfg.ServoPin].angle = 180    
     return 'true'
 def left_side():
-    kit.servo[SERVO].angle = 0
+    kit.servo[cfg.ServoPin].angle = 0
     return 'true'
     
-def up_side(forward_speed_value): 
+def up_side(forwardSpeedValue): 
    stop_motor()
-   kit.continuous_servo[ESC].throttle = forward_speed_value 
+   kit.continuous_servo[cfg.EscPin].throttle = forwardSpeedValue 
    print("speed=")
-   print(forward_speed_value)
+   print(forwardSpeedValue)
    return 'true'
    
 def down_side():
    stop_motor()
-   kit.continuous_servo[ESC].throttle = backward_speed_value
+   kit.continuous_servo[cfg.EscPin].throttle = cfg.backwardSpeedValue
    print("speed=")
-   print(backward_speed_value)
+   print(cfg.backwardSpeedValue)
    return 'true'
    
 def stop_motor():
-   pca.channels[ESC].duty_cycle = 0x0000
+   pca.channels[cfg.EscPin].duty_cycle = 0x0000
    return 'true'
    
 def center_wheels():
@@ -160,29 +147,25 @@ def center_wheels():
 def arm_esc():
    stop_motor()
    time.sleep(1)
-   kit.continuous_servo[ESC].throttle = .10
+   kit.continuous_servo[cfg.EscPin].throttle = .10
    time.sleep(1)
-   kit.continuous_servo[ESC].throttle = .30
+   kit.continuous_servo[cfg.EscPin].throttle = .30
    stop_motor()
    return 'true'
 
-# Gamepad
-speed = 0.0
-steering = 0.0
-
-def runRcWorker():
+def runRcControl():
     # Start the background updating
     gamepad.startBackgroundUpdates()
     try:
         while gamepad.isConnected():
-            if gamepad.beenPressed(buttonExit):
+            if gamepad.beenPressed(cfg.buttonExit):
                 print('EXIT')
                 break
-            if gamepad.beenPressed(buttonArm):
+            if gamepad.beenPressed(cfg.buttonArm):
                 arm_esc()
                 print('ESC ARMED') 
                 
-            leftRight = float(gamepad.axis(joystickSteering))        
+            leftRight = float(gamepad.axis(cfg.joystickSteering))        
             if leftRight < -0.50:
                 # Turning left
                 left_side()
@@ -195,9 +178,9 @@ def runRcWorker():
                 
             axisUpDownInverted = 1
             if axisUpDownInverted:
-                upDown = float("{:.2f}".format(-gamepad.axis(joystickSpeed)))
+                upDown = float("{:.2f}".format(-gamepad.axis(cfg.joystickSpeed)))
             else:
-                upDown = float("{:.2f}".format(gamepad.axis(joystickSpeed)))
+                upDown = float("{:.2f}".format(gamepad.axis(cfg.joystickSpeed)))
                         
             if upDown >= 0:
                 if upDown == 0:
@@ -207,26 +190,26 @@ def runRcWorker():
                     print("Positive number.")
                     print (upDown)                
                     if upDown > 0.60 and upDown < 0.90:
-                        if gamepad.isPressed(buttonBeep):
-                            forward_speed_value = -.10
+                        if gamepad.isPressed(cfg.buttonBeep):
+                            cfg.forwardSpeedValue = -.10
                         else: 
-                            forward_speed_value = -.09                   
-                        up_side(forward_speed_value)
+                            cfg.forwardSpeedValue = -.09                   
+                        up_side(cfg.forwardSpeedValue)
                         print("0.60 or more.")                
                     if upDown > 0.90:
-                        if gamepad.isPressed(buttonBeep):
-                            forward_speed_value = -.13
+                        if gamepad.isPressed(cfg.buttonBeep):
+                            cfg.forwardSpeedValue = -.13
                         else:
-                            forward_speed_value = -.12                    
-                        up_side(forward_speed_value)
+                            cfg.forwardSpeedValue = -.12                    
+                        up_side(cfg.forwardSpeedValue)
                         print("0.90 or more.")
                     else:
-                        if gamepad.isPressed(buttonBeep):
-                            forward_speed_value = -.10
+                        if gamepad.isPressed(cfg.buttonBeep):
+                            cfg.forwardSpeedValue = -.10
                         else: 
-                            forward_speed_value = -.09
+                            cfg.forwardSpeedValue = -.09
                         
-                        up_side(forward_speed_value)
+                        up_side(cfg.forwardSpeedValue)
                         print("0.60 or less.")
             else: 
                 print("Negative number.")            
@@ -235,15 +218,12 @@ def runRcWorker():
                     print("-24 or less.")    
                     #theaterChase(strip, Color(127, 0, 0), 15)  # Red theater chase                
 
-            if gamepad.isPressed(buttonBeep):
-                print('GO!')
-                
+            if gamepad.isPressed(cfg.buttonBeep):
+                print('GO!')                
             
             #mpu6050()
-
-            time.sleep(pollInterval)
+            time.sleep(cfg.pollInterval)
             #colorWipe(strip, Color(0, 0, 0), 1)
-
     finally:
         gamepad.disconnect()
         
@@ -255,7 +235,7 @@ if __name__ == '__main__':
         print("start first thread")
         t1 = threading.Thread(target=runApp).start()
         print("start second thread")
-        t2 = threading.Thread(target=runRcWorker).start()
+        t2 = threading.Thread(target=runRcControl).start()
     except Exception as e:
         print("Unexpected error:" + str(e))
     
