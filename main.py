@@ -7,17 +7,16 @@ Created on Sun Apr 09 09:44:23 2023
 This file serves as the main file for the Rpi Zero RC Car app
 """
 #Libraries
-import curses
-import os     #importing os library so as to communicate with the system
-import time   #importing time library to make Rpi wait because its too impatient 
+import time
+from sys import exit
 import board
-from board import SCL, SDA
+from board import SDA,SCL
 import busio
 from adafruit_pca9685 import PCA9685
 from adafruit_servokit import ServoKit
 import adafruit_mpu6050
-import Gamepad
-from rpi_ws281x import PixelStrip, Color
+import Lib.Gamepad as Gamepad
+from Lib.robotLight import RobotLight
 from flask import Flask, render_template, Response
 from processor.simple_streamer import SimpleStreamer as VideoCamera
 # from processor.pedestrian_detector import PedestrianDetector as VideoCamera
@@ -27,15 +26,6 @@ from processor.simple_streamer import SimpleStreamer as VideoCamera
 # from processor.person_detector import PersonDetector as VideoCamera
 import threading
 import Config as cfg
-
-LED_COUNT = 8   # Number of LED pixels.
-LED_PIN = 18   # GPIO pin connected to the pixels (18 uses PWM!).
-# LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
-LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
-LED_DMA = 10          # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
-LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
-LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
 #Gamepad setup and controller check
@@ -53,6 +43,12 @@ print('Gamepad connected')
 i2c_bus = busio.I2C(SCL,SDA)
 pca = PCA9685(i2c_bus)
 pca.frequency = 60
+
+#LED lights setup
+RL=RobotLight()
+RL.start()
+
+print ("Done with LED lights")
 
 #IMU setup
 i2c_mpu = board.I2C()  # uses board.SCL and board.SDA
@@ -86,38 +82,17 @@ def video_feed():
 
 print ("Done with video feed")
 
-# Create NeoPixel object with appropriate configuration.
-strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-# Intialize the library (must be called once before other functions).
-#strip.begin()
-
+# Intialize the library (must be called once before other functions)
 def mpu6050():
     print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (mpu.acceleration))
     print("Gyro X:%.2f, Y: %.2f, Z: %.2f rad/s" % (mpu.gyro))
     print("")
-    time.sleep(1)
-
-def colorWipe(strip, color, wait_ms=50):
-    """Wipe color across display a pixel at a time."""
-    for i in range(strip.numPixels()):
-        strip.setPixelColor(i, color)
-        strip.show()
-        time.sleep(wait_ms / 1000.0)
-
-def theaterChase(strip, color, wait_ms=50, iterations=10):
-    """Movie theater light style chaser animation."""
-    for j in range(iterations):
-        for q in range(3):
-            for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i + q, color)
-            strip.show()
-            time.sleep(wait_ms / 1000.0)
-            for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i + q, 0)
+    time.sleep(0.1)
 
 def right_side():
     kit.servo[cfg.ServoPin].angle = 180    
     return 'true'
+    
 def left_side():
     kit.servo[cfg.ServoPin].angle = 0
     return 'true'
@@ -159,8 +134,9 @@ def runRcControl():
     try:
         while gamepad.isConnected():
             if gamepad.beenPressed(cfg.buttonExit):
-                print('EXIT')
+                cfg.gamePadExit = True
                 break
+                
             if gamepad.beenPressed(cfg.buttonArm):
                 arm_esc()
                 print('ESC ARMED') 
@@ -216,14 +192,14 @@ def runRcControl():
                 if upDown <= -0.24:
                     down_side()
                     print("-24 or less.")    
-                    #theaterChase(strip, Color(127, 0, 0), 15)  # Red theater chase                
+                    RL.police()  # Red brake warning lights               
 
             if gamepad.isPressed(cfg.buttonBeep):
                 print('GO!')                
             
             #mpu6050()
             time.sleep(cfg.pollInterval)
-            #colorWipe(strip, Color(0, 0, 0), 1)
+            RL.pause()
     finally:
         gamepad.disconnect()
         
@@ -236,7 +212,13 @@ if __name__ == '__main__':
         t1 = threading.Thread(target=runApp).start()
         print("start second thread")
         t2 = threading.Thread(target=runRcControl).start()
+        
     except Exception as e:
-        print("Unexpected error:" + str(e))
+        print("Unexpected error:" + str(e))   
+    
+    except:
+        if cfg.gamePadExit == True:
+            print('Exit Button Pressed')
+            sys.exit()
     
     
