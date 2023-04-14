@@ -17,6 +17,7 @@ from adafruit_servokit import ServoKit
 import adafruit_mpu6050
 import Lib.Gamepad as Gamepad
 from Lib.robotLight import RobotLight
+from Lib.tfluna import read_tfluna_data
 from flask import Flask, render_template, Response
 from processor.simple_streamer import SimpleStreamer as VideoCamera
 # from processor.pedestrian_detector import PedestrianDetector as VideoCamera
@@ -88,6 +89,15 @@ def mpu6050():
     print("Gyro X:%.2f, Y: %.2f, Z: %.2f rad/s" % (mpu.gyro))
     print("")
     time.sleep(0.1)
+    
+def tfLuna():    
+    if ser.isOpen() == False:
+        ser.open() # open serial port if not open
+
+    distance,strength,temperature = read_tfluna_data() # read values
+    print('Distance: {0:2.2f} m, Strength: {1:2.0f} / 65535 (16-bit), Chip Temperature: {2:2.1f} C'.\
+                  format(distance,strength,temperature)) # print sample data
+    ser.close() # close serial port
 
 def right_side():
     kit.servo[cfg.ServoPin].angle = 180    
@@ -198,6 +208,7 @@ def runRcControl():
                 print('GO!')                
             
             #mpu6050()
+            tfLuna()
             time.sleep(cfg.pollInterval)
             RL.pause()
     finally:
