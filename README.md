@@ -1,5 +1,5 @@
 
-# Rpizero-Hobby-RC-Car
+# Rpi-Hobby-RC-Car
 
 This was for a custom hobby rc car with a raspberry pi sbc. Python3 and pip are required. Opencv takes some time to build. I had to replace the steering servo to a three wire version in the rc car I chose. I added the link but most three wire that take pwm signals will do. You may not need to replace yours, mine was a five wire servo. Cut the red power wire from the ESC before you connect it to the PCA9685 board.
 
