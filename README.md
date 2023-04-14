@@ -7,21 +7,43 @@ This was for a custom hobby rc car with a raspberry pi sbc. Python3 and pip are 
 
 `sudo apt-get update`
 
+
+adafruit-blinka
+
+
 `sudo pip3 install adafruit-blinka`
 
 `sudo pip3 install adafruit-circuitpython-pca9685`
 
 `sudo pip3 install adafruit-circuitpython-servokit`
 
-`sudo pip3 install flask`
+
+flask
+
+
+`sudo pip3 install flask
+
+
+opencv dependencies
+
 
 `sudo apt-get install build-essential cmake pkg-config libjpeg-dev libtiff5-dev libjasper-dev libpng-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libfontconfig1-dev libcairo2-dev libgdk-pixbuf2.0-dev libpango1.0-dev libgtk2.0-dev libgtk-3-dev libatlas-base-dev gfortran libhdf5-dev libhdf5-serial-dev libhdf5-103 python3-pyqt5 python3-dev -y`
+
+`pip install --upgrade pip setuptools wheel`
+
+
+opencv
+
 
 `sudo pip3 install opencv-python`
 
 or
 
 `sudo pip3 install opencv-contrib-python`
+
+
+rpi car install
+
 
 `sudo git clone https://github.com/radfordwill/Rpizero-Hobby-RC-Car.git`
 
@@ -74,6 +96,8 @@ They suggest the following rc cars. I used a 1:10 model car and modified the fra
 [20 cm Jumper Wires](https://www.amazon.com/gp/product/B0B1ZYMFBJ/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=0f45c52f3e1e26fdbdd30c4379d4393b&camp=1789&creative=9325)
 
 [Goolsky Mini 2 8Kg 3 Wire Metal Gear Steering Servo -optional-](https://www.amazon.com/gp/product/B07D75QZND?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=5602e361dff0d8a37ccf5b37db0102aa&camp=1789&creative=9325)
+
+[PS4 DualShock 4 Wireless Controller](https://amzn.to/409KCmI)
 
 
 
