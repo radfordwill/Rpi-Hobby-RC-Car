@@ -1,7 +1,7 @@
 
 # Rpizero-Hobby-RC-Car
 
-This was for a custom hobby rc car with a raspberry pi sbc. Python3 required. Opencv takes some time to build. 
+This was for a custom hobby rc car with a raspberry pi sbc. Python3 and pip are required. Opencv takes some time to build. 
 
 requirements:
 
@@ -42,34 +42,34 @@ LaTrax Prerunner
 (amazon affiliate links)
 
 Holyton 1 10 Large High Speed Remote Control Car
-https://www.amazon.com/gp/product/B08B1F3494/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=a5871a5b2f58d54da336be76d4abd529&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B08B1F3494/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=a5871a5b2f58d54da336be76d4abd529&camp=1789&creative=9325
 
 Brushed ESC 
-https://www.amazon.com/gp/product/B07792FPD8/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=b229acde647191fe04d091e4002ce954&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B07792FPD8/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=b229acde647191fe04d091e4002ce954&camp=1789&creative=9325
 
 IMU MPU6050
-https://www.amazon.com/Gy-521-MPU-6050-MPU6050-Sensors-Accelerometer/dp/B008BOPN40/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=7cf9cfd6a0703f639e5233b96f02dc2f&camp=1789&creative=9325"
+https://www.amazon.com/Gy-521-MPU-6050-MPU6050-Sensors-Accelerometer/dp/B008BOPN40/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=7cf9cfd6a0703f639e5233b96f02dc2f&camp=1789&creative=9325
 
 WS2812B 5050 RGB 8-Bit Light Strip Driver Board
-https://www.amazon.com/gp/product/B081BBF4R3/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=ac957b4343d7128fc49eb0634e6abc5e&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B081BBF4R3/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=ac957b4343d7128fc49eb0634e6abc5e&camp=1789&creative=9325
 
 MakerFocus Lidar Range Finder Sensor Module TF-Luna
-https://www.amazon.com/gp/product/B088NVX2L7/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=57179b9cb3dfd3e78f85faa5a1d0c6bb&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B088NVX2L7/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=57179b9cb3dfd3e78f85faa5a1d0c6bb&camp=1789&creative=9325
 
 16 Channel 12 bit PWM Servo Motor Driver I2C
-https://www.amazon.com/gp/product/B082QT9D5F/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=b0fab216e1d7decc94ec049af2f824df&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B082QT9D5F/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=b0fab216e1d7decc94ec049af2f824df&camp=1789&creative=9325
 
 5200mAh 2S LiPo Battery 50C POWAY
-https://www.amazon.com/gp/product/B07Y1M571D/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=111564028c9594cd01c6afb5d2fd89c0&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B07Y1M571D/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=111564028c9594cd01c6afb5d2fd89c0&camp=1789&creative=9325
 
 kuman UPS Battery Pack Expansion Board Power Supply
-https://www.amazon.com/gp/product/B06W9FWDSP/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=55f9575e86e2699d50cd8f58029f507f&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B06W9FWDSP/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=55f9575e86e2699d50cd8f58029f507f&camp=1789&creative=9325
 
 Arducam 5MP Camera for Raspberry Pi
-https://www.amazon.com/Arducam-Megapixels-Sensor-OV5647-Raspberry/dp/B012V1HEP4/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=0a9469df29b006fb3b4a6dabb4f4665d&camp=1789&creative=9325"
+https://www.amazon.com/Arducam-Megapixels-Sensor-OV5647-Raspberry/dp/B012V1HEP4/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=0a9469df29b006fb3b4a6dabb4f4665d&camp=1789&creative=9325
 
 20 cm Jumper Wires
-https://www.amazon.com/gp/product/B0B1ZYMFBJ/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=0f45c52f3e1e26fdbdd30c4379d4393b&camp=1789&creative=9325"
+https://www.amazon.com/gp/product/B0B1ZYMFBJ/?&_encoding=UTF8&tag=radfordwill-20&linkCode=ur2&linkId=0f45c52f3e1e26fdbdd30c4379d4393b&camp=1789&creative=9325
 
 
 

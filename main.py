@@ -110,15 +110,15 @@ def left_side():
 def up_side(forwardSpeedValue): 
    stop_motor()
    kit.continuous_servo[cfg.EscPin].throttle = forwardSpeedValue 
-   print("speed=")
-   print(forwardSpeedValue)
+   #print("speed=")
+   #print(forwardSpeedValue)
    return 'true'
    
 def down_side():
    stop_motor()
    kit.continuous_servo[cfg.EscPin].throttle = cfg.backwardSpeedValue
-   print("speed=")
-   print(cfg.backwardSpeedValue)
+   #print("speed=")
+   #print(cfg.backwardSpeedValue)
    return 'true'
    
 def stop_motor():
@@ -173,22 +173,22 @@ def runRcControl():
                     #print("It is Zero!")
                     stop_motor()                
                 else:
-                    print("Positive number.")
-                    print (upDown)                
+                    #print("Positive number.")
+                    #print (upDown)                
                     if upDown > 0.60 and upDown < 0.90:
                         if gamepad.isPressed(cfg.buttonBeep):
                             cfg.forwardSpeedValue = -.10
                         else: 
                             cfg.forwardSpeedValue = -.09                   
                         up_side(cfg.forwardSpeedValue)
-                        print("0.60 or more.")                
+                        #print("0.60 or more.")                
                     if upDown > 0.90:
                         if gamepad.isPressed(cfg.buttonBeep):
                             cfg.forwardSpeedValue = -.13
                         else:
                             cfg.forwardSpeedValue = -.12                    
                         up_side(cfg.forwardSpeedValue)
-                        print("0.90 or more.")
+                        #print("0.90 or more.")
                     else:
                         if gamepad.isPressed(cfg.buttonBeep):
                             cfg.forwardSpeedValue = -.10
@@ -196,16 +196,16 @@ def runRcControl():
                             cfg.forwardSpeedValue = -.09
                         
                         up_side(cfg.forwardSpeedValue)
-                        print("0.60 or less.")
+                        #print("0.60 or less.")
             else: 
-                print("Negative number.")            
+                #print("Negative number.")            
                 if upDown <= -0.24:
                     down_side()
-                    print("-24 or less.")    
+                    #print("-24 or less.")    
                     RL.police()  # Red brake warning lights               
 
             if gamepad.isPressed(cfg.buttonBeep):
-                print('GO!')                
+                #print('GO!')                
             
             #mpu6050()
             tfLuna()
