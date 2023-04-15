@@ -19,7 +19,7 @@ import Lib.Gamepad as Gamepad
 from Lib.robotLight import RobotLight
 from Lib.tfluna import read_tfluna_data
 from flask import Flask, render_template, Response
-from processor.simple_streamer import SimpleStreamer as VideoCamera
+#from processor.simple_streamer import SimpleStreamer as VideoCamera
 # from processor.pedestrian_detector import PedestrianDetector as VideoCamera
 # from processor.motion_detector import MotionDetector as VideoCamera
 # from processor.qr_detector import QRDetector as VideoCamera
@@ -63,7 +63,7 @@ time.sleep(1)
 print ("Done with RC Controls & Sensors")
 
 #picamera and flask web page
-video_camera = VideoCamera(flip=False)
+#video_camera = VideoCamera(flip=False)
 app = Flask(__name__)
 
 @app.route('/')
@@ -207,15 +207,18 @@ def runRcControl():
             if gamepad.isPressed(cfg.buttonBeep):
                 #print('GO!')                
             
-            #mpu6050()
-            tfLuna()
-            time.sleep(cfg.pollInterval)
-            RL.pause()
+            
+            
+                #mpu6050()
+                #tfLuna()
+                time.sleep(cfg.pollInterval)
+                RL.pause()
     finally:
         gamepad.disconnect()
         
 def runApp():
-    app.run(debug=True, use_reloader=False, port=5000, host='0.0.0.0')
+    print('')
+    #app.run(debug=True, use_reloader=False, port=5000, host='0.0.0.0')
     
 if __name__ == '__main__':
     try:
